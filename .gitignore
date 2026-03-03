@@ -1,0 +1,8 @@
+# .gitignore
+.env
+output/
+data/ingested.txt
+data/summary.txt
+data/prioritized.txt
+__pycache__/
+*.pyc
