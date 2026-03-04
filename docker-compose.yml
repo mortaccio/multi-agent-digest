@@ -5,6 +5,8 @@ services:
     build: ./agents/ingestor
     container_name: agent_ingestor
     user: "1000:1000"
+    environment:
+      - MAX_TABLE_ROWS=200
     volumes:
       - ./data:/data
     restart: "no"
@@ -18,6 +20,8 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OLLAMA_URL=http://127.0.0.1:11434/api/generate
       - OLLAMA_MODEL=llama3:latest
+      - ENABLE_PREDICTION=true
+      - 'PREDICTIVE_PROMPT=If input includes tabular or time-series patterns, add forecast bullets in this format: "- Prediction: ...", "- Confidence: ...", "- Rationale: ...". If data is not sufficient, include "- Prediction: Not reliable (insufficient data)".'
     depends_on:
       ingestor:
         condition: service_completed_successfully

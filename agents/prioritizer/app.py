@@ -12,7 +12,10 @@ OUTPUT_FILE = "/data/prioritized.txt"
 
 PRIORITY_KEYWORDS = [
     "urgent", "today", "asap", "important",
-    "deadline", "critical", "action required"
+    "deadline", "critical", "action required",
+    "error", "failed", "failure", "exception",
+    "timeout", "warn", "warning", "outage",
+    "incident", "sev", "investigate"
 ]
 
 def score_line(line):

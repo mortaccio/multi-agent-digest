@@ -13,3 +13,11 @@ def test_no_keywords_scores_zero():
 
 def test_scoring_is_case_insensitive():
     assert score_line("URGENT DEADLINE ASAP") == 3
+
+
+def test_error_line_scores_priority():
+    assert score_line("CRITICAL error: database timeout exception") >= 4
+
+
+def test_action_line_scores_priority():
+    assert score_line("Action: Investigate payments immediately") >= 1

@@ -3,7 +3,7 @@
 Small personal pipeline that turns text notes into a daily markdown digest using 4 Dockerized agents:
 
 1. `ingestor` reads all files from `data/input/`
-2. `summarizer` sends combined text to local Ollama
+2. `summarizer` sends combined text to local Ollama (with optional prediction logic)
 3. `prioritizer` scores lines by urgency keywords
 4. `formatter` writes `output/daily_digest.md`
 
@@ -61,6 +61,7 @@ docker-compose.yml
 ## Quick Start
 
 1. Put your input text files into `data/input/` (for example `notes.txt`, `newsletter.txt`).
+   - Supported now: `.txt`, `.md`, `.log`, `.csv`, `.xlsx`
 2. Run the pipeline:
 
 ```bash
@@ -79,10 +80,28 @@ Current summarizer settings are in `docker-compose.yml`:
 
 - `OLLAMA_URL=http://127.0.0.1:11434/api/generate`
 - `OLLAMA_MODEL=llama3:latest`
+- `ENABLE_PREDICTION=true`
+- `PREDICTIVE_PROMPT=...`
+
+Current ingestor setting:
+
+- `MAX_TABLE_ROWS=200` (truncate large CSV/XLSX tables)
 
 If you want a different model, pull it first and then change `OLLAMA_MODEL`.
+If you want different forecasting behavior, edit `PREDICTIVE_PROMPT`.
 
 Note: `.env` includes `OPENAI_API_KEY`, but the current summarizer flow uses Ollama and does not require OpenAI.
+
+## Prediction Inputs (Simple)
+
+If you want "predict next value if possible":
+
+1. Put a table file in `data/input/` (for example `sales.xlsx` or `sales.csv`).
+2. Run `docker compose up --build`.
+3. Check `data/summary.txt` and `output/daily_digest.md`.
+
+The summarizer will try to infer trend and output a prediction section.
+If data is not enough, it should explicitly say prediction is not reliable.
 
 ## Troubleshooting
 
